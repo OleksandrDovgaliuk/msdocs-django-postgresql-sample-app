@@ -1,0 +1,92 @@
+{% load static %}
+{% include 'header.html' %}
+
+<html>
+<head>
+    <title>Djangogram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .post {
+          width: 30%;
+          border: 5px solid black;
+          padding: 10px;
+          margin-bottom: 20px;
+          box-sizing: border-box;
+        }
+
+        .post-image {
+          max-width: 100%;
+          margin-top: 10px;
+          border: 2px solid #ccc;
+          width: 50%;
+        }
+
+        .post-like {
+          margin-top: 10px;
+        }
+
+        .post-like button {
+          border: none;
+          background: none;
+          cursor: pointer;
+          font-size: 16px;
+        }
+
+        .post-like .liked {
+          color: red;
+        }
+
+        .avatar {
+          border-radius: 50%;
+        }
+
+        .user-info {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+
+        .username {
+          margin-left: 10px;
+        }
+
+        .post-container {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="post-container">
+        {% for post in object_list %}
+            <div class="post">
+                <div class="user-info">
+                    <img src="{{ post.author.avatar.url }}" class="avatar">
+                    <h3 class="username">{{ post.author.username }}</h3>
+                </div>
+                <h4 class="post_title">{{ post.title }}</h4>
+                <img src="{{ post.cover.url }}" class="post-image">
+
+                <div class="post-like">
+                    <form action="{% url 'like_post' pk=post.pk %}" method="POST" class="like-form">
+                        {% csrf_token %}
+                        <button type="submit" class="like-btn {% if request.user in post.likes.all %}liked{% endif %}">
+                            <i class="fas fa-thumbs-up"></i> Like
+                        </button>
+                    </form>
+
+                    <form action="{% url 'dislike_post' pk=post.pk %}" method="POST" class="dislike-form">
+                        {% csrf_token %}
+                        <button type="submit" class="dislike-btn {% if request.user in post.likes.all %}disliked{% endif %}">
+                            <i class="fas fa-thumbs-down"></i> Dislike
+                        </button>
+                    </form>
+
+                    <p class="likes-count">{{ post.likes.count }} likes</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
