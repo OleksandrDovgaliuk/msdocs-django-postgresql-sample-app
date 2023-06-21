@@ -89,11 +89,10 @@ LOGOUT_REDIRECT_URL = "home"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djangogram',
-        'USER': 'postgres',
-        'PASSWORD': "xswayzx1488zxc",
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('DBNAME'),
+        'HOST': os.environ.get('DBHOST'),
+        'USER': os.environ.get('DBUSER'),
+        'PASSWORD': os.environ.get('DBPASS'),
     }
 }
 
